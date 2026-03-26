@@ -11,11 +11,30 @@
 body {
     margin: 0;
     font-family: 'Inter', sans-serif;
-    background: radial-gradient(circle at top, #1e293b, #020617);
+    background: radial-gradient(circle at top, #0f172a, #020617);
     color: white;
+    overflow-x: hidden;
 }
 
-/* Merged Navbar Style */
+/* Glow background */
+body::before {
+    content: '';
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(59,130,246,0.25), transparent);
+    top: -200px;
+    left: -200px;
+    animation: float 6s infinite alternate;
+    z-index: -1;
+}
+
+@keyframes float {
+    from { transform: translateY(0px); }
+    to { transform: translateY(40px); }
+}
+
+/* ── Navbar (from old code) ── */
 .navbar {
     display: flex;
     align-items: center;
@@ -34,13 +53,14 @@ body {
 }
 
 .logo img {
-    height: 100px; /* Balanced height for the new design */
+    height: 100px;
     width: auto;
 }
 
 .hero {
     text-align: center;
     padding: 80px 20px 40px;
+    animation: fadeIn 1.2s ease-in;
 }
 
 h1 {
@@ -52,10 +72,10 @@ h1 {
 }
 
 .subtitle {
-    font-size: 18px;
-    color: #cbd5f5;
     max-width: 700px;
     margin: auto;
+    color: #cbd5f5;
+    font-size: 18px;
 }
 
 .tagline {
@@ -95,13 +115,14 @@ h1 {
     max-width: 400px;
     margin: 60px auto;
     text-align: center;
+    animation: fadeInUp 1.2s ease;
 }
 
 input {
     width: 100%;
     padding: 14px;
     margin: 10px 0;
-    border-radius: 8px;
+    border-radius: 10px;
     border: 1px solid rgba(255,255,255,0.1);
     background: rgba(15, 23, 42, 0.6);
     color: white;
@@ -111,7 +132,7 @@ input {
 button {
     width: 100%;
     padding: 14px;
-    border-radius: 8px;
+    border-radius: 10px;
     border: none;
     font-weight: 600;
     background: linear-gradient(90deg, #3b82f6, #6366f1);
@@ -121,8 +142,8 @@ button {
 }
 
 button:hover {
-    transform: scale(1.03);
-    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(99,102,241,0.6);
 }
 
 /* Loader */
@@ -132,8 +153,8 @@ button:hover {
     border: 4px solid #1e293b;
     border-top: 4px solid #38bdf8;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     animation: spin 1s linear infinite;
 }
 
@@ -147,6 +168,8 @@ button:hover {
     padding: 25px;
     border-radius: 14px;
     background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    animation: fadeInUp 1s ease;
 }
 
 .score {
@@ -167,6 +190,30 @@ button:hover {
 .moderate { background: #eab308; color: black; }
 .risky { background: #dc2626; }
 
+.scenario {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.04);
+    transition: 0.3s;
+    text-align: left;
+}
+
+.scenario:hover {
+    transform: translateY(-5px);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
 /* Popup */
 .popup {
     position: fixed;
@@ -174,7 +221,7 @@ button:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.8);
+    background: rgba(0,0,0,0.85);
     display: none;
     justify-content: center;
     align-items: center;
@@ -187,97 +234,112 @@ button:hover {
     border-radius: 12px;
     text-align: center;
     border: 1px solid rgba(255,255,255,0.1);
+    animation: fadeIn 0.5s ease;
 }
 
 .footer {
     text-align: center;
     padding: 40px;
     color: #94a3b8;
+    font-size: 12px;
 }
 </style>
 </head>
 
 <body>
 
+<!-- ── Navbar with Logo (from old code) ── -->
 <div class="navbar">
     <div class="logo">
         <img src="finecortex.png" alt="FINCOTIX AI Logo">
     </div>
 </div>
 
+<!-- ── Hero ── -->
 <div class="hero">
     <h1>FINCOTIX AI</h1>
     <p class="subtitle">
-        The AI Brain for Financial Decision Intelligence.  
-        Make safer financial decisions by understanding risk, goals, and long-term stability — not just investments.
+        The AI Brain for Financial Decision Intelligence.<br>
+        Evaluate decisions. Understand risk. Build financial clarity.
     </p>
-    <div class="tagline">
-        AI-powered • Global • No investment required
+    <div class="tagline">AI-powered • Global • No investment required</div>
+</div>
+
+<!-- ── Feature Cards ── -->
+<div class="container">
+    <div class="features">
+        <div class="card">🧠 Financial Fragility Score</div>
+        <div class="card">📊 Decision Intelligence Engine</div>
+        <div class="card">🎯 Goal Intelligence</div>
+        <div class="card">⚠️ Continuous Risk Monitoring</div>
+    </div>
+
+    <!-- ── Score Form ── -->
+    <div class="form-box">
+        <h2>Check Your Financial Profile</h2>
+
+        <input type="number" id="income"   placeholder="Monthly Income">
+        <input type="number" id="expenses" placeholder="Monthly Expenses">
+        <input type="number" id="savings"  placeholder="Savings">
+        <input type="number" id="emi"      placeholder="EMI">
+
+        <button onclick="calculateScore()">Analyze</button>
+
+        <div class="loader" id="loader"></div>
+
+        <div class="result-box" id="result" style="display:none;">
+            <div class="score" id="score"></div>
+            <div id="status" class="status"></div>
+            <p id="insight1"></p>
+            <p id="insight2"></p>
+            <p id="insight3"></p>
+
+            <div class="scenario">
+                <h4>Scenario Comparison</h4>
+                <p><b>Invest More:</b></p>
+                <p id="scenarioA"></p>
+                <p><b>Hold / Do Not Invest:</b></p>
+                <p id="scenarioB"></p>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="container">
-
-<div class="features">
-<div class="card">🧠 Financial Fragility Score</div>
-<div class="card">📊 Decision Intelligence Engine</div>
-<div class="card">🎯 Goal Intelligence</div>
-<div class="card">⚠️ Continuous Risk Monitoring</div>
-</div>
-
-<div class="form-box">
-<h2>Check Your Financial Score</h2>
-
-<input type="number" id="income" placeholder="Monthly Income">
-<input type="number" id="expenses" placeholder="Monthly Expenses">
-<input type="number" id="savings" placeholder="Savings">
-<input type="number" id="emi" placeholder="EMI">
-
-<button onclick="calculateScore()">Get My Score</button>
-
-<div class="loader" id="loader"></div>
-
-<div class="result-box" id="result" style="display:none;">
-    <div class="score" id="score"></div>
-    <div id="status" class="status"></div>
-    <p id="insight"></p>
-</div>
-
-</div>
-
-</div>
-
+<!-- ── Roadmap ── -->
 <div class="container" style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 80px;">
-<h2 style="text-align:center; margin-bottom: 40px;">Platform Roadmap</h2>
-
-<div class="features">
-<div class="card">🧠 Decision Intelligence Engine</div>
-<div class="card">🎯 Goal Planning (Education, Retirement)</div>
-<div class="card">⚠️ Continuous Risk Monitoring</div>
-<div class="card">👨‍👩‍👧 Family Financial Continuity</div>
+    <h2 style="text-align:center; margin-bottom: 40px;">Platform Roadmap</h2>
+    <div class="features">
+        <div class="card">🧠 Decision Intelligence Engine</div>
+        <div class="card">🎯 Goal Planning (Education, Retirement)</div>
+        <div class="card">⚠️ Continuous Risk Monitoring</div>
+        <div class="card">👨‍👩‍👧 Family Financial Continuity</div>
+    </div>
 </div>
-</div>
 
+<!-- ── Footer ── -->
 <div class="footer">
-FINCOTIX AI © 2026
+    Illustrative analysis only. Not financial advice.<br>
+    FINCOTIX AI © 2026
 </div>
 
+<!-- ── Lead Popup ── -->
 <div class="popup" id="popup">
-<div class="popup-content">
-<h3>Get Full Report</h3>
-<p style="color: #94a3b8; font-size: 14px;">Submit your email to receive a detailed breakdown.</p>
-<input type="email" id="userEmail" placeholder="Enter your email">
-<button onclick="sendEmail()">Submit</button>
-<p onclick="document.getElementById('popup').style.display='none'" style="cursor:pointer; margin-top:15px; font-size:12px; color:#6366f1;">Close</p>
-</div>
+    <div class="popup-content">
+        <h3>Get Full Report</h3>
+        <p style="color: #94a3b8; font-size: 14px;">Submit your email to receive a detailed breakdown.</p>
+        <input type="email" id="userEmail" placeholder="Enter your email">
+        <button onclick="sendEmail()">Submit</button>
+        <p onclick="document.getElementById('popup').style.display='none'"
+           style="cursor:pointer; margin-top:15px; font-size:12px; color:#6366f1;">Close</p>
+    </div>
 </div>
 
 <script>
 function calculateScore() {
-    let income = parseFloat(document.getElementById('income').value);
+    let income   = parseFloat(document.getElementById('income').value);
     let expenses = parseFloat(document.getElementById('expenses').value);
-    let savings = parseFloat(document.getElementById('savings').value);
-    let emi = parseFloat(document.getElementById('emi').value);
+    let savings  = parseFloat(document.getElementById('savings').value);
+    let emi      = parseFloat(document.getElementById('emi').value);
 
     if (!income || !expenses || isNaN(savings) || isNaN(emi)) {
         alert("Please fill all fields to calculate your score.");
@@ -288,40 +350,46 @@ function calculateScore() {
     document.getElementById('result').style.display = 'none';
 
     setTimeout(() => {
-        // Scoring Logic based on financial ratios
-        let savingsScore = savings / expenses > 6 ? 80 : 40;
-        let expenseScore = expenses / income < 0.6 ? 80 : 40;
-        let debtScore = emi / income < 0.3 ? 80 : 40;
+        let score = Math.round(
+            ((savings / expenses) * 20) +
+            ((income - expenses) / income * 40) +
+            ((1 - emi / income) * 40)
+        );
 
-        let score = Math.round((savingsScore + expenseScore + debtScore) / 3);
-
-        let statusText, statusClass, insight;
+        let statusText, statusClass;
 
         if (score >= 75) {
-            statusText = "Safe";
+            statusText  = "Safe";
             statusClass = "safe";
-            insight = "Strong financial stability.";
         } else if (score >= 50) {
-            statusText = "Moderate";
+            statusText  = "Moderate";
             statusClass = "moderate";
-            insight = "Needs improvement.";
         } else {
-            statusText = "Risky";
+            statusText  = "Risky";
             statusClass = "risky";
-            insight = "Financial risk is high.";
         }
 
         document.getElementById('loader').style.display = 'none';
         document.getElementById('result').style.display = 'block';
+
         document.getElementById('score').innerText = score;
 
         let statusEl = document.getElementById('status');
-        statusEl.innerText = statusText;
-        statusEl.className = "status " + statusClass;
+        statusEl.innerText   = statusText;
+        statusEl.className   = "status " + statusClass;
 
-        document.getElementById('insight').innerText = insight;
+        document.getElementById('insight1').innerText =
+            "Your financial profile indicates " + statusText.toLowerCase() + " stability.";
+        document.getElementById('insight2').innerText =
+            "Increasing investments may improve long-term outcomes but reduce liquidity.";
+        document.getElementById('insight3').innerText =
+            "Market outcomes remain uncertain.";
 
-        // Show Lead Generation Popup
+        document.getElementById('scenarioA').innerText =
+            "Improves long-term growth potential but increases volatility exposure.";
+        document.getElementById('scenarioB').innerText =
+            "Maintains stability but may slow wealth growth.";
+
         setTimeout(() => {
             document.getElementById('popup').style.display = 'flex';
         }, 1200);
@@ -331,7 +399,7 @@ function calculateScore() {
 
 function sendEmail() {
     let email = document.getElementById('userEmail').value;
-    if(!email) { alert("Enter email"); return; }
+    if (!email) { alert("Enter email"); return; }
     window.location.href = `mailto:fincotix.ai@gmail.com?subject=FINCOTIX Lead&body=${email}`;
 }
 </script>
