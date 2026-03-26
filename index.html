@@ -16,23 +16,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Glow background */
-body::before {
-    content: '';
-    position: fixed;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(59,130,246,0.25), transparent);
-    top: -200px;
-    left: -200px;
-    animation: float 6s infinite alternate;
-    z-index: -1;
-}
 
-@keyframes float {
-    from { transform: translateY(0px); }
-    to { transform: translateY(40px); }
-}
 
 /* ── Navbar (from old code) ── */
 .navbar {
