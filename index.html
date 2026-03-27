@@ -846,23 +846,16 @@ function analyze() {
 
 /* ═══════════════════════
    AI CHAT
+   ✅ Ab /api/chat call hoga — Vercel Serverless Function
+   localhost:3000 ki zaroorat nahi!
 ═══════════════════════ */
-const aiResponses = [
-    "Based on your profile, this decision may increase growth potential but also raises short-term risk. Monitor your liquidity carefully.",
-    "Investing consistently over time generally outperforms market timing. Your current stability score supports moderate investment.",
-    "Your EMI-to-income ratio is within safe limits. Reducing it further would improve your financial fragility score.",
-    "Building a 6-month emergency fund before aggressive investment is a strong financial foundation strategy.",
-    "Diversification across asset classes can reduce volatility while maintaining a healthy growth trajectory.",
-    "Your savings rate appears healthy. Consider goal-based allocation to retirement and education funds.",
-    "Market outcomes remain uncertain. Decisions should align with your risk tolerance, time horizon, and goals — not short-term trends."
-];
-
-function sendMessage() {
+async function sendMessage() {
     let input = document.getElementById('userInput').value.trim();
     if (!input) return;
 
     let chatBox = document.getElementById('chatBox');
 
+    // User bubble
     let userMsg = document.createElement('div');
     userMsg.className = 'chat-msg user';
     userMsg.innerText = input;
@@ -870,20 +863,38 @@ function sendMessage() {
     document.getElementById('userInput').value = '';
     chatBox.scrollTop = chatBox.scrollHeight;
 
+    // Typing indicator
     let typing = document.createElement('div');
     typing.className = 'typing';
     typing.innerText = 'FINCOTIX is thinking...';
     chatBox.appendChild(typing);
     chatBox.scrollTop = chatBox.scrollHeight;
 
-    setTimeout(() => {
+    try {
+        // ✅ KEY CHANGE: localhost:3000 → /api/chat (Vercel serverless)
+        const response = await fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: input })
+        });
+
+        const data = await response.json();
         chatBox.removeChild(typing);
+
         let botMsg = document.createElement('div');
         botMsg.className = 'chat-msg bot';
-        botMsg.innerText = aiResponses[Math.floor(Math.random() * aiResponses.length)];
+        botMsg.innerText = data.reply || "Sorry, I could not process that. Please try again.";
         chatBox.appendChild(botMsg);
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }, 1000);
+
+    } catch (err) {
+        chatBox.removeChild(typing);
+        let errMsg = document.createElement('div');
+        errMsg.className = 'chat-msg bot';
+        errMsg.innerText = "⚠️ Could not connect to AI. Please check your Vercel environment variable setup.";
+        chatBox.appendChild(errMsg);
+    }
+
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
 
 /* ═══════════════════════
