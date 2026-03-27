@@ -1,0 +1,29 @@
+{
+  "name": "fincotex",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Seocial-Media-Solutions/Fincotex.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Seocial-Media-Solutions/Fincotex/issues"
+  },
+  "homepage": "https://github.com/Seocial-Media-Solutions/Fincotex#readme",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "dotenv": "^17.3.1",
+    "ejs": "^5.0.1",
+    "express": "^5.2.1",
+    "node-fetch": "^2.7.0"
+  }
+}
