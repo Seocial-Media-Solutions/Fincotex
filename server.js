@@ -34,10 +34,10 @@ app.post('/api/chat', async (req, res) => {
     }
 
     try {
-        console.log("Using Groq API (llama-3.3-70b-versatile)...");
+        console.log("Using Groq API (llama3-8b-8192)...");
 
         const payload = {
-            model: "llama-3.3-70b-versatile",
+            model: "llama3-8b-8192",
             messages: [
                 { role: "system", content: SYSTEM_PROMPT },
                 { role: "user", content: message }
