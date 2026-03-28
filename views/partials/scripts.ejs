@@ -1,0 +1,306 @@
+<script>
+/* ═══════════════════════
+   PAGE SWITCHING
+═══════════════════════ */
+function showDashboard() {
+    document.getElementById('landing-page').classList.remove('active');
+    document.getElementById('dashboard-page').classList.add('active');
+    animateBars();
+    initCharts();
+    window.scrollTo(0, 0);
+}
+function showLanding() {
+    document.getElementById('dashboard-page').classList.remove('active');
+    document.getElementById('landing-page').classList.add('active');
+    window.scrollTo(0, 0);
+}
+function toggleTool() {
+    let toolSection = document.getElementById("tool");
+    let heroBtn = document.getElementById("heroCtaBtn");
+    let footerBtn = document.getElementById("footerCtaBtn");
+    
+    if (toolSection.style.display === "none") {
+        toolSection.style.display = "block";
+        if (heroBtn) heroBtn.innerText = "Close";
+        if (footerBtn) footerBtn.innerText = "Close Tool";
+    } else {
+        toolSection.style.display = "none";
+        if (heroBtn) heroBtn.innerText = "Check Your Financial Score";
+        if (footerBtn) footerBtn.innerText = "Get Started";
+    }
+}
+
+/* ═══════════════════════
+   TAB SWITCHING
+═══════════════════════ */
+const tabTitles = {
+    'tab-dashboard': 'Dashboard',
+    'tab-insights':  'Insights',
+    'tab-goals':     'Goals',
+    'tab-scenarios': 'Scenario Analysis',
+    'tab-chat':      'AI Decision Assistant'
+};
+function switchTab(tabId, el) {
+    document.querySelectorAll('.dash-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.sidebar li').forEach(l => l.classList.remove('active-nav'));
+    document.getElementById(tabId).classList.add('active');
+    el.classList.add('active-nav');
+    document.getElementById('dash-title').innerText = tabTitles[tabId];
+}
+
+/* ═══════════════════════
+   ANIMATE BARS
+═══════════════════════ */
+function animateBars() {
+    setTimeout(() => {
+        document.getElementById('bar-risk').style.width      = '60%';
+        document.getElementById('bar-goal').style.width      = '75%';
+        document.getElementById('bar-liquidity').style.width = '50%';
+    }, 150);
+}
+
+/* ═══════════════════════
+   CHART.JS CHARTS
+═══════════════════════ */
+let chartsInit = false;
+const scaleOpts = {
+    x: { ticks: { color: '#64748b' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    y: { ticks: { color: '#64748b' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+};
+const legendOpts = { labels: { color: '#94a3b8', font: { family: 'Inter', size: 12 } } };
+
+function initCharts() {
+    if (chartsInit) return;
+    chartsInit = true;
+
+    new Chart(document.getElementById('riskChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Liquidity', 'Risk', 'Stability'],
+            datasets: [{
+                label: 'Financial Metrics',
+                data: [50, 60, 70],
+                backgroundColor: ['rgba(56,189,248,0.65)', 'rgba(99,102,241,0.65)', 'rgba(34,197,94,0.65)'],
+                borderRadius: 6
+            }]
+        },
+        options: { plugins: { legend: legendOpts }, scales: scaleOpts }
+    });
+
+    new Chart(document.getElementById('goalChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Achieved', 'Remaining'],
+            datasets: [{
+                data: [60, 40],
+                backgroundColor: ['rgba(56,189,248,0.8)', 'rgba(30,41,59,0.9)'],
+                borderWidth: 0
+            }]
+        },
+        options: { plugins: { legend: legendOpts } }
+    });
+
+    new Chart(document.getElementById('trendChart'), {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Risk Trend',
+                data: [40, 50, 60, 55, 62, 58],
+                borderColor: '#38bdf8',
+                backgroundColor: 'rgba(56,189,248,0.08)',
+                tension: 0.4, fill: true,
+                pointBackgroundColor: '#38bdf8'
+            }]
+        },
+        options: { plugins: { legend: legendOpts }, scales: scaleOpts }
+    });
+
+    new Chart(document.getElementById('goalProgressChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Retirement', 'Home Purchase', 'Education Fund'],
+            datasets: [{
+                label: 'Progress (%)',
+                data: [65, 58, 42],
+                backgroundColor: ['rgba(56,189,248,0.7)', 'rgba(99,102,241,0.7)', 'rgba(234,179,8,0.7)'],
+                borderRadius: 6
+            }]
+        },
+        options: { plugins: { legend: legendOpts }, scales: scaleOpts }
+    });
+
+    new Chart(document.getElementById('scenarioChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Growth', 'Risk', 'Liquidity'],
+            datasets: [
+                { label: 'Invest',    data: [80, 70, 40], backgroundColor: 'rgba(56,189,248,0.7)',  borderRadius: 6 },
+                { label: 'No Invest', data: [50, 30, 80], backgroundColor: 'rgba(99,102,241,0.7)', borderRadius: 6 }
+            ]
+        },
+        options: { plugins: { legend: legendOpts }, scales: scaleOpts }
+    });
+}
+
+/* ═══════════════════════
+   ANALYZE SCORE
+═══════════════════════ */
+function analyze() {
+    let income   = parseFloat(document.getElementById('income').value);
+    let expenses = parseFloat(document.getElementById('expenses').value);
+    let savings  = parseFloat(document.getElementById('savings').value);
+    let emi      = parseFloat(document.getElementById('emi').value);
+
+    if (!income || !expenses || isNaN(savings) || isNaN(emi)) {
+        alert("Please fill all fields to calculate your score.");
+        return;
+    }
+
+    document.getElementById('loader').style.display = 'block';
+    document.getElementById('result').style.display = 'none';
+
+    setTimeout(() => {
+        let score = Math.round(
+            (savings / expenses) * 20 +
+            (income - expenses) / income * 40 +
+            (1 - emi / income) * 40
+        );
+
+        let statusText, statusClass;
+        if      (score >= 75) { statusText = "Safe";     statusClass = "safe"; }
+        else if (score >= 50) { statusText = "Moderate"; statusClass = "moderate"; }
+        else                  { statusText = "Risky";    statusClass = "risky"; }
+
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('scoreNum').innerText   = score;
+
+        let badge = document.getElementById('statusBadge');
+        badge.innerText = statusText;
+        badge.className = "status " + statusClass;
+
+        document.getElementById('insight1').innerText =
+            "Your financial profile shows " + statusText.toLowerCase() + " stability.";
+        document.getElementById('insight2').innerText =
+            "Investment decisions may improve long-term outcomes but increase short-term risk.";
+        document.getElementById('scenarioA').innerText =
+            "Growth potential increases but volatility rises.";
+        document.getElementById('scenarioB').innerText =
+            "Stability remains but long-term growth slows.";
+
+        // Sync to dashboard
+        document.getElementById('dash-score').innerText       = score;
+        document.getElementById('dash-score-label').innerText = statusText + " Stability";
+
+        setTimeout(() => {
+            document.getElementById('popup').style.display = 'flex';
+        }, 1200);
+    }, 1200);
+}
+
+/* ═══════════════════════
+   AI CHAT
+   ✅ Ab /api/chat call hoga — Vercel Serverless Function
+   localhost:3000 ki zaroorat nahi!
+═══════════════════════ */
+/* ═══════════════════════
+   UNIFIED AI CHAT LOGIC
+═══════════════════════ */
+async function sendUnifiedMessage(type) {
+    let inputId = type === 'dashboard' ? 'dashboardUserInput' : 'user-input';
+    let chatBoxId = type === 'dashboard' ? 'dashboardChatBox' : 'chat-messages';
+    
+    let input = document.getElementById(inputId).value.trim();
+    if (!input) return;
+
+    let chatBox = document.getElementById(chatBoxId);
+
+    // User message
+    let userMsg = document.createElement('div');
+    userMsg.className = type === 'dashboard' ? 'chat-msg user' : 'message user-message';
+    userMsg.innerText = input;
+    chatBox.appendChild(userMsg);
+    document.getElementById(inputId).value = '';
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    // Typing indicator
+    let typing = document.createElement('div');
+    typing.className = type === 'dashboard' ? 'chat-msg bot' : 'message ai-message';
+    typing.style.fontStyle = 'italic';
+    typing.style.opacity = '0.7';
+    typing.innerHTML = 'FINCOTIX is analyzing...';
+    chatBox.appendChild(typing);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    try {
+        const response = await fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: input })
+        });
+
+        const data = await response.json();
+        chatBox.removeChild(typing);
+
+        let botMsg = document.createElement('div');
+        botMsg.className = type === 'dashboard' ? 'chat-msg bot' : 'message ai-message';
+        botMsg.innerText = data.reply || "I'm sorry, I couldn't process that. Please try again.";
+        chatBox.appendChild(botMsg);
+
+    } catch (err) {
+        if (chatBox.contains(typing)) chatBox.removeChild(typing);
+        let errMsg = document.createElement('div');
+        errMsg.className = type === 'dashboard' ? 'chat-msg bot' : 'message ai-message';
+        errMsg.style.color = '#ef4444';
+        errMsg.innerText = "⚠️ Connection lost. Please check your network or API settings.";
+        chatBox.appendChild(errMsg);
+    }
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+    if (window.lucide) lucide.createIcons();
+}
+
+/* ═══════════════════════
+   EMAIL
+═══════════════════════ */
+function sendEmail() {
+    let email = document.getElementById('userEmail').value;
+    if (!email) { alert("Enter email"); return; }
+    window.location.href = `mailto:fincotix.ai@gmail.com?subject=FINCOTIX Lead&body=${email}`;
+}
+</script>
+<script>
+window.onload = function() {
+    if (window.lucide) lucide.createIcons();
+};
+
+function toggleChat() {
+    const modal = document.getElementById('chat-modal');
+    modal.classList.toggle('active');
+    
+    if (modal.classList.contains('active')) {
+        setTimeout(() => {
+            document.getElementById('user-input').focus();
+        }, 300);
+    }
+}
+
+// Click outside to close
+document.addEventListener('click', function(event) {
+    const modal = document.getElementById('chat-modal');
+    const btn = document.getElementById('ai-assistant-btn');
+    
+    if (!modal.contains(event.target) && !btn.contains(event.target) && modal.classList.contains('active')) {
+        modal.classList.remove('active');
+    }
+});
+</script>
+<script>
+function toggleMobileSidebar() {
+    const sidebar = document.getElementById('mobileSidebar');
+    const overlay = document.querySelector('.sidebar-overlay');
+    if(sidebar) sidebar.classList.toggle('active');
+    if(overlay) overlay.classList.toggle('active');
+}
+</script>

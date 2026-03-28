@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const { GoogleGenerativeAI } = require("@google/generative-ai");
 require('dotenv').config();
 
 app.use(express.urlencoded({ extended: true }));
@@ -10,10 +9,6 @@ app.use(express.json());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
-
-// Use gemini-pro for maximum compatibility
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
-const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
 const SYSTEM_PROMPT = `You are FINCOTIX AI, a financial decision intelligence system.
 IMPORTANT RULES:
@@ -31,35 +26,58 @@ app.get('/', (req, res) => {
 
 app.post('/api/chat', async (req, res) => {
     const { message } = req.body;
-    if (!message) return res.status(400).json({ error: "Message required" });
+    if (!message) return res.status(400).json({ error: "Message is required" });
+
+    const API_KEY = process.env.GROQ_API_KEY;
+    if (!API_KEY) {
+        return res.status(500).json({ reply: "⚠️ GROQ_API_KEY is missing in your .env file." });
+    }
 
     try {
-        console.log("Input Message:", message);
-        
-        // Combine system prompt and user message directly for gemini-pro (v1/v1beta compatibility)
-        const prompt = `${SYSTEM_PROMPT}\n\nUser Question: ${message}`;
-        
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
-        
-        return res.status(200).json({ reply: text });
-    } catch (err) {
-        console.error("Gemini Error:", err.message);
-        
-        // Handle specific 404/Not Found errors
-        if (err.message.includes("404") || err.message.includes("not found")) {
-            return res.status(500).json({ 
-                reply: "The AI model 'gemini-pro' could not be found. This usually means your API Key is restricted or your regional account doesn't support this model yet." 
-            });
+        console.log("Using Groq API (llama-3.3-70b-versatile)...");
+
+        const payload = {
+            model: "llama-3.3-70b-versatile",
+            messages: [
+                { role: "system", content: SYSTEM_PROMPT },
+                { role: "user", content: message }
+            ],
+            max_tokens: 300
+        };
+
+        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${API_KEY}`
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+            console.error("Groq API Error:", data.error);
+
+            // Handle rate limiting
+            if (data.error.code === "rate_limit_exceeded" || response.status === 429) {
+                return res.status(429).json({ reply: "⏳ Rate limit reached. Please wait a moment before trying again." });
+            }
+
+            return res.status(500).json({ reply: `❌ API Error: ${data.error.message}` });
         }
-        
-        return res.status(500).json({ reply: "I'm having trouble connecting to the AI. Please verify your GEMINI_API_KEY in the .env file." });
+
+        const reply = data.choices?.[0]?.message?.content || "No reply from AI.";
+        return res.status(200).json({ reply });
+
+    } catch (err) {
+        console.error("Server Error:", err);
+        return res.status(500).json({ reply: "❌ Connection Error. Please verify your internet and GROQ_API_KEY." });
     }
 });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-    console.log("Using Gemini API Key starting with:", process.env.GEMINI_API_KEY ? process.env.GEMINI_API_KEY.substring(0, 5) : "MISSING");
+    console.log(`\n🚀 Server running on http://localhost:${PORT}`);
+    console.log(`🔑 Groq Key check: ${process.env.GROQ_API_KEY ? 'Present ✅' : 'MISSING ❌'}\n`);
 });

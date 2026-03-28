@@ -1,0 +1,115 @@
+<div class="hero">
+        <h1>Are You Making the Right<br>Financial Decisions?</h1>
+        <p class="subtitle">
+            FINCOTIX AI helps you evaluate financial decisions, understand risks,<br>
+            and plan your future with clarity.
+        </p>
+        <button class="cta" id="heroCtaBtn" onclick="toggleTool()">Check Your Financial Score</button>
+        
+        <div id="tool" style="display: none; padding-top: 30px; animation: fadeInUp 0.5s ease;">
+            <div class="glass-card" style="margin: 0 auto; text-align: left;">
+                <input type="number" id="income"   placeholder="Monthly Income">
+                <input type="number" id="expenses" placeholder="Monthly Expenses">
+                <input type="number" id="savings"  placeholder="Savings">
+                <input type="number" id="emi"      placeholder="EMI">
+                <button onclick="analyze()">Analyze</button>
+                <div class="loader" id="loader"></div>
+                <div class="result-box" id="result" style="display:none;">
+                    <div class="score-num" id="scoreNum"></div>
+                    <div id="statusBadge" class="status"></div>
+                    <p id="insight1"></p>
+                    <p id="insight2"></p>
+                    <div class="scenario">
+                        <h4 style="margin-top:0; color:#e2e8f0;">Scenario Comparison</h4>
+                        <p><b>Invest More:</b></p>
+                        <p id="scenarioA"></p>
+                        <p><b>Hold / Do Not Invest:</b></p>
+                        <p id="scenarioB"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="features">
+            <div class="feature-card">🧠 Financial Fragility Score</div>
+            <div class="feature-card">📊 Decision Intelligence Engine</div>
+            <div class="feature-card">🎯 Goal Intelligence</div>
+            <div class="feature-card">⚠️ Continuous Risk Monitoring</div>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section">
+        <h2>The Problem</h2>
+        <p>You earn, save, and invest — but are you making the right decisions?</p>
+        <ul>
+            <li>Uncertainty about financial safety</li>
+            <li>No clear visibility of risk</li>
+            <li>No structured decision system</li>
+        </ul>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section">
+        <h2>The Solution</h2>
+        <p><b style="color:#e2e8f0;">FINCOTIX AI is your Financial Decision Intelligence System</b></p>
+        <ul>
+            <li>Evaluate decisions before acting</li>
+            <li>Understand risk exposure</li>
+            <li>Align actions with goals</li>
+        </ul>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section">
+        <h2>How It Works</h2>
+        <ol>
+            <li>Enter your financial details</li>
+            <li>Get your financial score</li>
+            <li>Understand insights &amp; scenarios</li>
+        </ol>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section">
+        <h2>Not Another Finance App</h2>
+        <ul>
+            <li>No product pushing</li>
+            <li>No commissions</li>
+            <li>Pure decision intelligence</li>
+        </ul>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section">
+        <h2>Family Financial Continuity</h2>
+        <p>Ensure your financial information and instructions are accessible to your family during critical moments.</p>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section">
+        <h2>Platform Roadmap</h2>
+        <div class="features">
+            <div class="feature-card">🧠 Decision Intelligence Engine</div>
+            <div class="feature-card">🎯 Goal Planning (Education, Retirement)</div>
+            <div class="feature-card">⚠️ Continuous Risk Monitoring</div>
+            <div class="feature-card">👨‍👩‍👧 Family Financial Continuity</div>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section" style="text-align:center;">
+        <h2>Start Understanding Your Financial Decisions Today</h2>
+        <button class="cta" id="footerCtaBtn" onclick="toggleTool()">Get Started</button>
+    </div>
+
+    

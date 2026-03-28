@@ -1,0 +1,143 @@
+<div class="dash-main">
+
+        <div class="dash-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+            <button class="hamburger" style="color:#38bdf8;" onclick="toggleMobileSidebar()"><i data-lucide="menu"></i></button>
+
+            <h2 id="dash-title">Dashboard</h2>
+        </div>
+            <button class="upgrade-btn">Upgrade</button>
+        </div>
+
+        <!-- ── DASHBOARD TAB ── -->
+        <div id="tab-dashboard" class="dash-section active">
+            <div class="dash-grid">
+                <div class="dash-card">
+                    <h3>Financial Score</h3>
+                    <div class="big-score" id="dash-score">72</div>
+                    <div class="score-label" id="dash-score-label">Moderate Stability</div>
+                </div>
+                <div class="dash-card">
+                    <h3>Risk Level</h3>
+                    <div class="bar-track"><div class="bar-fill" id="bar-risk" style="width:0%"></div></div>
+                    <div class="bar-label"><span>Low</span><span>60%</span></div>
+                </div>
+                <div class="dash-card">
+                    <h3>Goal Probability</h3>
+                    <div class="bar-track"><div class="bar-fill" id="bar-goal" style="width:0%"></div></div>
+                    <div class="bar-label"><span>Unlikely</span><span>75%</span></div>
+                </div>
+                <div class="dash-card">
+                    <h3>Liquidity</h3>
+                    <div class="bar-track"><div class="bar-fill" id="bar-liquidity" style="width:0%"></div></div>
+                    <div class="bar-label"><span>Low</span><span>50%</span></div>
+                </div>
+            </div>
+            <div class="chart-row">
+                <div class="chart-card">
+                    <h4>Financial Metrics</h4>
+                    <canvas id="riskChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h4>Goal Achievement</h4>
+                    <canvas id="goalChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h4>Continuity Vault</h4>
+                <div class="vault-item"><div class="vault-dot"></div> Family Access Configured</div>
+                <div class="vault-item"><div class="vault-dot"></div> Emergency Instructions Added</div>
+                <div class="vault-item" style="color:#64748b;">
+                    <div class="vault-dot" style="background:#64748b;"></div> Legal Documents — Pending
+                </div>
+            </div>
+        </div>
+
+        <!-- ── INSIGHTS TAB ── -->
+        <div id="tab-insights" class="dash-section">
+            <div class="chart-card">
+                <h4>Risk Trend Over Time</h4>
+                <canvas id="trendChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h4>Key Insights</h4>
+                <div style="color:#cbd5f5; font-size:14px; line-height:1.9;">
+                    <p>📌 Your financial profile indicates <b style="color:#38bdf8;">moderate stability</b>.</p>
+                    <p>📌 Increasing investments may improve long-term outcomes but reduce liquidity.</p>
+                    <p>📌 EMI burden is within acceptable range. Continue monitoring monthly.</p>
+                    <p>📌 Savings coverage ratio is above 3 months — a healthy buffer.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── GOALS TAB ── -->
+        <div id="tab-goals" class="dash-section">
+            <div class="chart-card">
+                <h4>Goal Progress</h4>
+                <canvas id="goalProgressChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h4>Goal Details</h4>
+                <div style="font-size:14px; color:#cbd5f5;">
+                    <p>🎯 <b>Retirement Goal</b></p>
+                    <div class="bar-track"><div class="bar-fill" style="width:65%"></div></div>
+                    <div class="bar-label"><span></span><span>65% probability</span></div>
+                    <p style="margin-top:16px;">🏠 <b>Home Purchase</b></p>
+                    <div class="bar-track"><div class="bar-fill" style="width:58%"></div></div>
+                    <div class="bar-label"><span></span><span>58% probability</span></div>
+                    <p style="margin-top:16px;">🎓 <b>Education Fund</b></p>
+                    <div class="bar-track"><div class="bar-fill" style="width:42%"></div></div>
+                    <div class="bar-label"><span></span><span>42% probability</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── SCENARIOS TAB ── -->
+        <div id="tab-scenarios" class="dash-section">
+            <div class="chart-card">
+                <h4>Scenario Comparison — Invest vs Hold</h4>
+                <canvas id="scenarioChart"></canvas>
+            </div>
+            <div class="chart-row">
+                <div class="chart-card">
+                    <h4>If You Invest</h4>
+                    <p style="color:#38bdf8; font-size:14px; line-height:1.8; margin:0;">
+                        Growth potential increases significantly.<br>
+                        Volatility and short-term risk rise.<br>
+                        Liquidity reduces temporarily.
+                    </p>
+                </div>
+                <div class="chart-card">
+                    <h4>If You Don't Invest</h4>
+                    <p style="color:#6366f1; font-size:14px; line-height:1.8; margin:0;">
+                        Stability and liquidity remain high.<br>
+                        Long-term wealth growth slows.<br>
+                        Inflation may erode purchasing power.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── AI ASSISTANT TAB ── -->
+        <div id="tab-chat" class="dash-section">
+            <div class="chart-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                    <h4 style="margin:0;">AI Decision Assistant</h4>
+                    <div style="font-size:11px; color:#22c55e; display:flex; align-items:center; gap:6px;">
+                        <span style="width:8px; height:8px; background:#22c55e; border-radius:50%; box-shadow:0 0 8px #22c55e;"></span>
+                        Online
+                    </div>
+                </div>
+                <div class="chat-box" id="dashboardChatBox">
+                    <div class="chat-msg bot">👋 Hi! I'm your FINCOTIX AI assistant. Ask me anything about your financial decisions, risk, or goals.</div>
+                </div>
+                <div class="chat-input-row">
+                    <input type="text" id="dashboardUserInput" placeholder="Ask about a financial decision..." onkeydown="if(event.key==='Enter') sendUnifiedMessage('dashboard')">
+                    <button onclick="sendUnifiedMessage('dashboard')">
+                        <i data-lucide="send" style="width:18px; height:18px;"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /dash-main -->
