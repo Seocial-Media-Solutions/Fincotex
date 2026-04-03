@@ -153,22 +153,17 @@
 
     <hr class="divider">
 
-    <!-- CTA -->
-    <div class="section" style="text-align:center;">
-        <h2>Start Understanding Your Financial Decisions Today</h2>
-        <button class="cta" id="footerCtaBtn" onclick="toggleTool()">Get Started</button>
-    </div>
-
     <!-- STYLES -->
     <style>
     .beta-badge {
         display:inline-block;
-        padding:6px 14px;
+        padding:8px 16px;
         border-radius:20px;
         background:rgba(59,130,246,0.1);
         color:#38bdf8;
         font-size:12px;
-        margin-bottom:15px;
+        margin-top:20px;
+        margin-bottom:20px;
         border:1px solid rgba(56,189,248,0.2);
     }
 
@@ -188,18 +183,15 @@
     function toggleTool() {
         let toolSection = document.getElementById("tool");
         let heroBtn = document.getElementById("heroCtaBtn");
-        let footerBtn = document.getElementById("footerCtaBtn");
         
         if (toolSection.style.display === "none") {
             toolSection.style.display = "block";
             if (heroBtn) heroBtn.innerText = "Close";
-            if (footerBtn) footerBtn.innerText = "Close Tool";
             // Scroll to tool
             toolSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
         } else {
             toolSection.style.display = "none";
             if (heroBtn) heroBtn.innerText = "Check Your Financial Score";
-            if (footerBtn) footerBtn.innerText = "Get Started";
         }
     }
     </script>

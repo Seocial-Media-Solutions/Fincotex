@@ -40,7 +40,7 @@ body {
     top: 0;
     z-index: 100;
 }
-.logo img { max-height: 100px; height: auto; width: auto; display: block; }
+.logo img { max-height: 120px; height: auto; width: auto; display: block; }
 .nav-menu { display: flex; align-items: center; }
 .nav-btn {
     padding: 10px 22px;
@@ -249,7 +249,12 @@ button:hover { transform: scale(1.03); box-shadow: 0 0 20px rgba(99,102,241,0.6)
     font-size: 22px; font-weight: 700;
     background: linear-gradient(90deg, #38bdf8, #6366f1);
     -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    transition: all 0.3s ease;
     margin-bottom: 32px;
+}
+.sidebar-logo:hover {
+    transform: scale(1.05);
+    filter: brightness(1.2);
 }
 .sidebar ul { list-style: none; padding: 0; margin: 0; flex: 1; }
 .sidebar li {
